@@ -11,7 +11,6 @@
    {:active-panel :jobs-panel
     :jobs-fetch :not-asked
     :jobs {}
-    :jobs-fetch-error nil
     :current-job-fetch :not-asked
     :current-job nil}))
 
@@ -33,7 +32,7 @@
 (r/reg-event-db
   :fetch-jobs-failure
   (fn [db [_ error]]
-    (assoc db :jobs-fetch :failure :jobs-fetch-error error)))
+    (assoc db :jobs-fetch :failure)))
 
 (r/reg-event-db
  :run-tests

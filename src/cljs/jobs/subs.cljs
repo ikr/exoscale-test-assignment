@@ -10,3 +10,8 @@
   :jobs-fetch
   (fn [db _]
     (:jobs-fetch db)))
+
+(r/reg-sub
+  :jobs-list
+  (fn [db _]
+    (vals (:jobs db))))

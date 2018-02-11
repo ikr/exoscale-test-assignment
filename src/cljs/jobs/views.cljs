@@ -6,10 +6,12 @@
             [jobs.config :as config]))
 
 (defn jobs-table []
-  (let [fetch-state (r/subscribe [:jobs-fetch])]
+  (let [fetch-state (r/subscribe [:jobs-fetch])
+        jobs-list (r/subscribe [:jobs-list])]
     (condp = @fetch-state
       :not-asked [:div.alert.alert-info "Initializing…"]
       :loading [:div.alert.alert-info "Fetching…"]
+      :failure [:div.alert.alert-danger "Failed fetching jobs :("]
       :success [:table.table
                 [:thead
                  [:tr
