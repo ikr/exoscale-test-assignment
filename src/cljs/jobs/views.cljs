@@ -5,8 +5,14 @@
             [jobs.subs :as subs]
             [jobs.config :as config]))
 
+(defn jobs-table []
+  (let [fetch-state (r/subscribe [:jobs-fetch])]
+    (condp = @fetch-state
+      :not-asked [:div.alert.alert-info "Initializing…"]
+      :loading [:div.alert.alert-info "Fetching…"])))
+
 (defn jobs-panel []
-  [:h1 "All jobs"])
+  [:div [:h1 "All jobs"] (jobs-table)])
 
 (defn current-job-panel []
   [:p "Current job"])

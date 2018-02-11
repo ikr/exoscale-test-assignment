@@ -5,3 +5,8 @@
   :active-panel
   (fn [db _]
     (:active-panel db)))
+
+(r/reg-sub
+  :jobs-fetch
+  (fn [db _]
+    (:jobs-fetch db)))
