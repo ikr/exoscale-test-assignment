@@ -6,7 +6,7 @@
             [jobs.config :as config]))
 
 (defn jobs-panel []
-  [:p "All jobs"])
+  [:h1 "All jobs"])
 
 (defn current-job-panel []
   [:p "Current job"])
@@ -18,11 +18,12 @@
       :current-job-panel (current-job-panel))))
 
 (defn footer []
-  [:div.footer
-   (when config/debug?
-     [:button
+  [:footer.text-right {:style {:padding-top "100px"}}
+   (if config/debug?
+     [:button.btn.btn-sm.btn-outline-info
       {:type "button" :on-click #(r/dispatch [:run-tests])}
-      "Run tests"])])
+      "Run tests"]
+     "")])
 
 (defn layout []
-  [:div.container (content) (footer)])
+  [:div (content) (footer)])
