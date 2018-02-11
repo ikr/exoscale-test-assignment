@@ -5,6 +5,13 @@
             [jobs.subs :as subs]
             [jobs.config :as config]))
 
+(defn job-row [job]
+  [:tr {:key (str/join ["r" (:id job)])}
+   [:td.text-right (:id job)]
+   [:td (:company job)]
+   [:td (:title job)]
+   [:td (str/join ", " (:keywords job))]])
+
 (defn jobs-table []
   (let [fetch-state (r/subscribe [:jobs-fetch])
         jobs-list (r/subscribe [:jobs-list])]
@@ -15,11 +22,11 @@
       :success [:table.table
                 [:thead
                  [:tr
-                  [:th "#"]
+                  [:th.text-right "#"]
                   [:th "Company"]
                   [:th "Title"]
                   [:th "Keywords"]]]
-                [:tbody]])))
+                [:tbody (map job-row @jobs-list)]])))
 
 (defn jobs-panel []
   [:div [:h1 "All jobs"] (jobs-table)])
@@ -38,11 +45,15 @@
    (if config/debug?
      (list
       [:button.btn.btn-sm.btn-outline-info
-       {:type "button" :on-click #(r/dispatch [:fetch-jobs])}
+       {:type "button"
+        :on-click #(r/dispatch [:fetch-jobs])
+        :key "b1"}
        "Refresh"]
       " "
       [:button.btn.btn-sm.btn-outline-info
-       {:type "button" :on-click #(r/dispatch [:run-tests])}
+       {:type "button"
+        :on-click #(r/dispatch [:run-tests])
+        :key "b2"}
        "Run tests"])
      "")])
 

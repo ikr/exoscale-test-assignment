@@ -27,7 +27,7 @@
 (r/reg-event-db
   :fetch-jobs-success
   (fn [db [_ result]]
-    (assoc db :jobs-fetch :success :jobs result)))
+    (assoc db :jobs-fetch :success :jobs (:jobs result))))
 
 (r/reg-event-db
   :fetch-jobs-failure
