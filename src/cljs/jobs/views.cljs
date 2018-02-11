@@ -5,12 +5,21 @@
             [jobs.subs :as subs]
             [jobs.config :as config]))
 
+(defn jobs-table-header-row []
+  [:tr
+   [:th.text-right "#"]
+   [:th "Company"]
+   [:th "Title"]
+   [:th "Keywords"]
+   [:th ""]])
+
 (defn job-row [job]
   [:tr {:key (str/join ["r" (:id job)])}
    [:td.text-right (:id job)]
    [:td (:company job)]
    [:td (:title job)]
-   [:td (str/join ", " (:keywords job))]])
+   [:td (str/join ", " (:keywords job))]
+   [:td ""]])
 
 (defn jobs-table []
   (let [fetch-state (r/subscribe [:jobs-fetch])
@@ -20,12 +29,7 @@
       :loading [:div.alert.alert-info "Fetching…"]
       :failure [:div.alert.alert-danger "Failed fetching jobs :("]
       :success [:table.table
-                [:thead
-                 [:tr
-                  [:th.text-right "#"]
-                  [:th "Company"]
-                  [:th "Title"]
-                  [:th "Keywords"]]]
+                [:thead (jobs-table-header-row)]
                 [:tbody (map job-row @jobs-list)]])))
 
 (defn jobs-panel []
