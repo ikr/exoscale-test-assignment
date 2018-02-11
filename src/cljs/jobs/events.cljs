@@ -17,7 +17,7 @@
 (r/reg-event-fx
   :fetch-jobs
   (fn [{:keys [db]} _]
-    {:db (assoc db :jobs-fetch :loading)
+    {:db (assoc db :active-panel :jobs-panel :jobs-fetch :loading)
      :http-xhrio {:method :get
                   :uri "/jobs"
                   :response-format (ajax/json-response-format {:keywords? true})
@@ -31,8 +31,13 @@
 
 (r/reg-event-db
   :fetch-jobs-failure
-  (fn [db [_ error]]
+  (fn [db _]
     (assoc db :jobs-fetch :failure)))
+
+(r/reg-event-db
+ :edit-new-job
+ (fn [db _]
+   (assoc db :active-panel :current-job-panel)))
 
 (r/reg-event-db
  :run-tests

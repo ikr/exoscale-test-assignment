@@ -18,7 +18,7 @@
    [:td.text-right (:id job)]
    [:td (:company job)]
    [:td (:title job)]
-   [:td (str/join ", " (:keywords job))]
+   [:td (str/join " " (:keywords job))]
    [:td.text-right
     [:button.btn.btn-sm.btn-secondary
      {:type "button"
@@ -47,12 +47,21 @@
    [:div.text-right
     {:style {:margin "12px"}}
     [:button.btn.btn-lg.btn-primary
-     {:type "button"}
+     {:type "button"
+      :on-click #(r/dispatch [:edit-new-job])}
      "New"]]
    (jobs-table)])
 
 (defn current-job-panel []
-  [:p "Current job"])
+  [:div
+   [:h1 "New job"]
+   [:p "Coming soon"]
+   [:button.btn.btn-lg.btn-primary {:type "button"} "Create"]
+   " "
+   [:button.btn.btn-lg.btn-secondary
+    {:type "button"
+     :on-click #(r/dispatch [:fetch-jobs])}
+    "Cancel"]])
 
 (defn content []
   (let [active (r/subscribe [:active-panel])]
