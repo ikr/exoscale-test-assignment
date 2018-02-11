@@ -9,7 +9,15 @@
   (let [fetch-state (r/subscribe [:jobs-fetch])]
     (condp = @fetch-state
       :not-asked [:div.alert.alert-info "Initializing…"]
-      :loading [:div.alert.alert-info "Fetching…"])))
+      :loading [:div.alert.alert-info "Fetching…"]
+      :success [:table.table
+                [:thead
+                 [:tr
+                  [:th "#"]
+                  [:th "Company"]
+                  [:th "Title"]
+                  [:th "Keywords"]]]
+                [:tbody]])))
 
 (defn jobs-panel []
   [:div [:h1 "All jobs"] (jobs-table)])
@@ -26,9 +34,14 @@
 (defn footer []
   [:footer.text-right {:style {:padding-top "100px"}}
    (if config/debug?
-     [:button.btn.btn-sm.btn-outline-info
-      {:type "button" :on-click #(r/dispatch [:run-tests])}
-      "Run tests"]
+     (list
+      [:button.btn.btn-sm.btn-outline-info
+       {:type "button" :on-click #(r/dispatch [:fetch-jobs])}
+       "Refresh"]
+      " "
+      [:button.btn.btn-sm.btn-outline-info
+       {:type "button" :on-click #(r/dispatch [:run-tests])}
+       "Run tests"])
      "")])
 
 (defn layout []

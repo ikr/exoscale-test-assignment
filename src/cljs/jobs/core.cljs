@@ -20,4 +20,5 @@
 (defn ^:export init []
   (dev-setup)
   (r/dispatch [:init-db])
+  (r/dispatch [:fetch-jobs])
   (mount-root))
