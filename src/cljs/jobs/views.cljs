@@ -19,7 +19,16 @@
    [:td (:company job)]
    [:td (:title job)]
    [:td (str/join ", " (:keywords job))]
-   [:td ""]])
+   [:td.text-right
+    [:button.btn.btn-sm.btn-secondary
+     {:type "button"
+      :key "e"}
+     "Edit"]
+    " "
+    [:button.btn.btn-sm.btn-warning
+     {:type "button"
+      :key "d"}
+     "Delete"]]])
 
 (defn jobs-table []
   (let [fetch-state (r/subscribe [:jobs-fetch])
@@ -33,7 +42,14 @@
                 [:tbody (map job-row @jobs-list)]])))
 
 (defn jobs-panel []
-  [:div [:h1 "All jobs"] (jobs-table)])
+  [:div
+   [:h1 "All jobs"]
+   [:div.text-right
+    {:style {:margin "12px"}}
+    [:button.btn.btn-lg.btn-primary
+     {:type "button"}
+     "New"]]
+   (jobs-table)])
 
 (defn current-job-panel []
   [:p "Current job"])
