@@ -1,6 +1,6 @@
 (ns jobs.core
   (:require [reagent.core :as reagent]
-            [re-frame.core :as re-frame]
+            [re-frame.core :as r]
             [jobs.events :as events]
             [jobs.routes :as routes]
             [jobs.views :as views]
@@ -14,9 +14,10 @@
     (println "dev mode")))
 
 (defn mount-root []
-  (re-frame/clear-subscription-cache!)
-  (reagent/render [views/main-panel] (.getElementById js/document "app")))
+  (r/clear-subscription-cache!)
+  (reagent/render [views/layout] (.getElementById js/document "app")))
 
 (defn ^:export init []
   (dev-setup)
+  (r/dispatch [:init-db])
   (mount-root))
