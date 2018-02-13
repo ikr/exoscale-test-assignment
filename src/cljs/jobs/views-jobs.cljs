@@ -38,7 +38,7 @@
                 [:thead (jobs-table-header-row)]
                 [:tbody (map job-row @jobs-list)]])))
 
-(defn jobs-panel []
+(defn panel []
   [:div
    [:h1 "All jobs"]
    [:div.text-right
