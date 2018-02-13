@@ -12,7 +12,7 @@
     :jobs-fetch :not-asked
     :jobs {}
     :current-job-fetch :not-asked
-    :current-job nil}))
+    :current-job {:company "" :title "" :keywords []}}))
 
 (r/reg-event-fx
   :fetch-jobs
@@ -38,6 +38,11 @@
  :edit-new-job
  (fn [db _]
    (assoc db :active-panel :current-job-panel)))
+
+(r/reg-event-db
+ :change-current-job
+ (fn [db [_ key value]]
+   (assoc-in db [:current-job key] value)))
 
 (r/reg-event-db
  :run-tests

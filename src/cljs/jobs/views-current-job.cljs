@@ -1,14 +1,24 @@
 (ns jobs.views-current-job
-  (:require [re-frame.core :as r]))
+  (:require [re-frame.core :as r]
+            [clojure.string :as str]))
+
+(defn direct-input-change-handler [key]
+  #(r/dispatch [:change-current-job
+                key
+                (-> % .-target .-value)]))
 
 (defn form []
   [:form
    [:div.form-group
     [:label {:for "company"} "Company"]
-    [:input#company.form-control {:required true}]]
+    [:input#company.form-control
+     {:required true
+      :on-change (direct-input-change-handler :company)}]]
    [:div.form-group
     [:label {:for "title"} "Title"]
-    [:input#title.form-control {:required true}]]
+    [:input#title.form-control
+     {:required true
+      :on-change (direct-input-change-handler :title)}]]
    [:div.form-group
     [:label {:for "keywords"} "Keywords"]
     [:input#keywords.form-control {:required true}]
