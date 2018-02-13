@@ -17,6 +17,7 @@
 
 (defn form []
   [:form
+   {:on-submit #(.preventDefault %)}
    [:div.form-group
     [:label {:for "company"} "Company"]
     [:input#company.form-control
