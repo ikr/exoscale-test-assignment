@@ -26,16 +26,19 @@
      [:label {:for "company"} "Company"]
      [:input#company.form-control
       {:required true
+       :default-value (:company @current-job)
        :on-change (direct-input-change-handler :company)}]]
     [:div.form-group
      [:label {:for "title"} "Title"]
      [:input#title.form-control
       {:required true
+       :default-value (:title @current-job)
        :on-change (direct-input-change-handler :title)}]]
     [:div.form-group
      [:label {:for "keywords"} "Keywords"]
      [:input#keywords.form-control
       {:required true
+       :default-value (str/join " " (:keywords @current-job))
        :on-change (splitting-input-change-handler :keywords)}]
      [:small.form-text.text-muted
       "Please separate keywords with spaces."

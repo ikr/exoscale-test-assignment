@@ -19,6 +19,7 @@
    [:td.text-right
     [:button.btn.btn-sm.btn-secondary
      {:type "button"
+      :on-click #(r/dispatch [:edit-existing-job (:id job)])
       :key "e"}
      "Edit"]
     " "

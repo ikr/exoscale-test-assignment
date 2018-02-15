@@ -5,13 +5,16 @@
             [jobs.querystring :as qs]
             [jobs.test :as test]))
 
+(defn empty-job [] {:company "" :title "" :keywords []})
+
 (r/reg-event-db
  :init-db
  (fn [_ _]
    {:active-panel :jobs-panel
     :jobs-fetch :not-asked
     :jobs {}
-    :current-job {:company "" :title "" :keywords []}
+    :current-job-id nil
+    :current-job (empty-job)
     :current-job-saving false
     :current-job-error nil}))
 
@@ -41,7 +44,19 @@
    (assoc db
           :active-panel :current-job-panel
           :current-job-saving false
-          :current-job-error nil)))
+          :current-job-error nil
+          :current-job-id nil
+          :current-job (empty-job))))
+
+(r/reg-event-db
+ :edit-existing-job
+ (fn [db [_ id]]
+   (assoc db
+          :active-panel :current-job-panel
+          :current-job-saving false
+          :current-job-error nil
+          :current-job-id id
+          :current-job (get-in db [:jobs (-> id str keyword)]))))
 
 (r/reg-event-db
  :change-current-job
@@ -72,7 +87,6 @@
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [:fetch-jobs]
                   :on-failure [:delete-failure]}}))
-
 
 (r/reg-event-db
   :current-job-failure
