@@ -2,8 +2,7 @@
   (:require [re-frame.core :as r]
             [ajax.core :as ajax]
             [jobs.db :as db]
-            [jobs.test :as test]
-            ))
+            [jobs.test :as test]))
 
 (r/reg-event-db
  :init-db
@@ -54,8 +53,8 @@
     {:db (assoc db :current-job-saving true)
      :http-xhrio {:method :post
                   :uri "/jobs"
-                  :body current-job
-                  :request-format (ajax/url-request-format)
+                  :body "title=BOOOO!"
+                  :format (ajax/url-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [:fetch-jobs]
                   :on-failure [:current-job-failure]}}))
