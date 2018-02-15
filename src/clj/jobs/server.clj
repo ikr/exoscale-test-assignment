@@ -4,6 +4,8 @@
             [clojure.spec.alpha    :as s]
             [bidi.bidi             :as bidi]
             [bidi.ring             :as ring]
+            [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+            [ring.middleware.params :refer [wrap-params]]
             [clojure.java.io       :as io]
             [clojure.tools.logging :refer [info error]])
   (:gen-class))
@@ -37,11 +39,11 @@
   "HTTP routes for our minimalistic API"
   ["/" {:get (ring/redirect "/index.html")
         "jobs" {:get  :list-jobs
-                 :post :create-job
-                 "/"   {:get           :list-jobs
-                        [[#"\d+" :id]] {:delete :remove-job
-                                        :get    :get-job
-                                        :put    :update-job}}}
+                :post :create-job
+                "/"   {:get           :list-jobs
+                       [[#"\d+" :id]] {:delete :remove-job
+                                       :get    :get-job
+                                       :put    :update-job}}}
         "static" (ring/resources-maybe {:prefix "public/"})}])
 
 (defn find-job
@@ -60,14 +62,14 @@
   {:job (find-job req)})
 
 (defmethod dispatch! :create-job
-  [{:keys [route-params params] :as req}]
+  [{:keys [params] :as req}]
   (let [id    (swap! jobid inc)
         job   {:id       id
                :title    (:title params)
                :company  (:company params)
                :keywords (->vec (:keywords params))}]
     (with-meta
-      {:job (get (swap! state assoc id job) id)}
+      {:job (get (swap! state assoc id job) id) :title (:title params)}
       {::status-code 201})))
 
 (defmethod dispatch! :remove-job
@@ -118,7 +120,7 @@
     (info "new request:" (:request-method req) (:uri req))
     (if-let [api-req (bidi/match-route* router uri req)]
       (-> api-req
-          (dispatch!)
+          ((-> dispatch! wrap-keyword-params wrap-params))
           (json-response))
       (resource-response uri))
     (catch Exception e
