@@ -24,7 +24,7 @@
     " "
     [:button.btn.btn-sm.btn-warning
      {:type "button"
-      :on-click #(r/dispatch [:delete-failure])
+      :on-click #(r/dispatch [:delete-job (:id job)])
       :key "d"}
      "Delete"]]])
 

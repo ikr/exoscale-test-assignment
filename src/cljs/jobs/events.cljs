@@ -1,5 +1,6 @@
 (ns jobs.events
-  (:require [re-frame.core :as r]
+  (:require [clojure.string :as str]
+            [re-frame.core :as r]
             [ajax.core :as ajax]
             [jobs.querystring :as qs]
             [jobs.test :as test]))
@@ -60,6 +61,18 @@
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [:fetch-jobs]
                   :on-failure [:current-job-failure]}}))
+(r/reg-event-fx
+  :delete-job
+  (fn [{:keys [db]} [_ id]]
+    {:db db
+     :http-xhrio {:method :delete
+                  :uri (str/join ["/jobs/" id])
+                  :body ""
+                  :format (ajax/url-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [:fetch-jobs]
+                  :on-failure [:delete-failure]}}))
+
 
 (r/reg-event-db
   :current-job-failure
