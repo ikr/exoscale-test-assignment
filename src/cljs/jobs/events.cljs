@@ -12,6 +12,7 @@
     :jobs-fetch :not-asked
     :jobs {}
     :current-job {:company "" :title "" :keywords []}
+    :current-job-saving false
     :current-job-error nil}))
 
 (r/reg-event-fx
@@ -39,12 +40,23 @@
  (fn [db _]
    (assoc db
           :active-panel :current-job-panel
+          :current-job-saving false
           :current-job-error nil)))
 
 (r/reg-event-db
  :change-current-job
  (fn [db [_ key value]]
    (assoc-in db [:current-job key] value)))
+
+(r/reg-event-fx
+  :post-job
+  (fn [{:keys [db]} _]
+    {:db (assoc db :current-job-saving true)
+     :http-xhrio {:method :get
+                  :uri "/jobs"
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [:fetch-jobs-success]
+                  :on-failure [:fetch-jobs-failure]}}))
 
 (r/reg-event-db
   :current-job-failure

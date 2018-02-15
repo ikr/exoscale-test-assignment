@@ -16,33 +16,35 @@
                 (-> % .-target .-value split)]))
 
 (defn form []
-  [:form
-   {:on-submit #(.preventDefault %)}
-   [:div.form-group
-    [:label {:for "company"} "Company"]
-    [:input#company.form-control
-     {:required true
-      :on-change (direct-input-change-handler :company)}]]
-   [:div.form-group
-    [:label {:for "title"} "Title"]
-    [:input#title.form-control
-     {:required true
-      :on-change (direct-input-change-handler :title)}]]
-   [:div.form-group
-    [:label {:for "keywords"} "Keywords"]
-    [:input#keywords.form-control
-     {:required true
-      :on-change (splitting-input-change-handler :keywords)}]
-    [:small.form-text.text-muted
-     "Please separate keywords with spaces."
-     " "
-     "You can use dashes to specify a single multi-part-keyword."]]
-   [:button.btn.btn-lg.btn-primary {:type "submit"} "Create"]
-   " "
-   [:button.btn.btn-lg.btn-secondary
-    {:type "button"
-     :on-click #(r/dispatch [:fetch-jobs])}
-    "Cancel"]])
+  (let [current-job-saving (r/subscribe [:current-job-saving])]
+   [:form
+    {:on-submit #(.preventDefault %)}
+    [:div.form-group
+     [:label {:for "company"} "Company"]
+     [:input#company.form-control
+      {:required true
+       :on-change (direct-input-change-handler :company)}]]
+    [:div.form-group
+     [:label {:for "title"} "Title"]
+     [:input#title.form-control
+      {:required true
+       :on-change (direct-input-change-handler :title)}]]
+    [:div.form-group
+     [:label {:for "keywords"} "Keywords"]
+     [:input#keywords.form-control
+      {:required true
+       :on-change (splitting-input-change-handler :keywords)}]
+     [:small.form-text.text-muted
+      "Please separate keywords with spaces."
+      " "
+      "You can use dashes to specify a single multi-part-keyword."]]
+    [:button.btn.btn-lg.btn-primary
+     {:type "submit" :disabled @current-job-saving} "Create"]
+    " "
+    [:button.btn.btn-lg.btn-secondary
+     {:type "button"
+      :on-click #(r/dispatch [:fetch-jobs])}
+     "Cancel"]]))
 
 (defn error-alert []
   (let [error (r/subscribe [:current-job-error])]
@@ -50,6 +52,6 @@
 
 (defn panel []
   [:div
-   [:h1 "New job!"]
+   [:h1 "New job"]
    (form)
    (error-alert)])

@@ -17,6 +17,11 @@
     (vals (:jobs db))))
 
 (r/reg-sub
+  :current-job-saving
+  (fn [db _]
+    (:current-job-saving db)))
+
+(r/reg-sub
   :current-job-error
   (fn [db _]
     (:current-job-error db)))
