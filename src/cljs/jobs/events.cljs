@@ -47,6 +47,8 @@
  (fn [db [_ key value]]
    (assoc-in db [:current-job key] value)))
 
+(defn generic-error-message [] "Oops, couldn't make it, sorry. Should we try again?")
+
 (r/reg-event-fx
   :post-job
   (fn [{:keys [db]} [_ current-job]]
@@ -62,10 +64,18 @@
 (r/reg-event-db
   :current-job-failure
   (fn [db _]
-    (assoc db :current-job-error "Oops, couldn't make it, sorry. Should we try again?")))
+    (assoc db :current-job-error (generic-error-message))))
+
+(r/reg-event-db
+  :delete-failure
+  (fn [db _]
+    (do
+      (.alert js/window (generic-error-message))
+      db)))
 
 (r/reg-event-db
  :run-tests
  (fn [db _]
-   (test/run)
-   db))
+   (do
+     (test/run)
+     db)))
