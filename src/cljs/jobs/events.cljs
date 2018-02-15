@@ -76,6 +76,19 @@
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [:fetch-jobs]
                   :on-failure [:current-job-failure]}}))
+
+(r/reg-event-fx
+  :put-job
+  (fn [{:keys [db]} [_ id current-job]]
+    {:db (assoc db :current-job-saving true)
+     :http-xhrio {:method :put
+                  :uri (str/join ["/jobs/" id])
+                  :body (qs/encode current-job)
+                  :format (ajax/url-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [:fetch-jobs]
+                  :on-failure [:current-job-failure]}}))
+
 (r/reg-event-fx
   :delete-job
   (fn [{:keys [db]} [_ id]]

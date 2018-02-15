@@ -22,6 +22,11 @@
     (:current-job db)))
 
 (r/reg-sub
+  :current-job-id
+  (fn [db _]
+    (:current-job-id db)))
+
+(r/reg-sub
   :current-job-saving
   (fn [db _]
     (:current-job-saving db)))

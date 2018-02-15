@@ -17,11 +17,14 @@
 
 (defn form []
   (let [current-job-saving (r/subscribe [:current-job-saving])
+        current-job-id (r/subscribe [:current-job-id])
         current-job (r/subscribe [:current-job])]
    [:form
     {:on-submit #(do
                    (.preventDefault %)
-                   (r/dispatch [:post-job @current-job]))}
+                   (r/dispatch (if @current-job-id
+                                 [:put-job @current-job-id @current-job]
+                                 [:post-job @current-job])))}
     [:div.form-group
      [:label {:for "company"} "Company"]
      [:input#company.form-control
@@ -45,7 +48,8 @@
       " "
       "You can use dashes to specify a single multi-part-keyword."]]
     [:button.btn.btn-lg.btn-primary
-     {:type "submit" :disabled @current-job-saving} "Create"]
+     {:type "submit" :disabled @current-job-saving}
+     (if @current-job-id "Update" "Create")]
     " "
     [:button.btn.btn-lg.btn-secondary
      {:type "button"
