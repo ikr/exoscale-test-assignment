@@ -11,7 +11,8 @@
    {:active-panel :jobs-panel
     :jobs-fetch :not-asked
     :jobs {}
-    :current-job {:company "" :title "" :keywords []}}))
+    :current-job {:company "" :title "" :keywords []}
+    :current-job-error nil}))
 
 (r/reg-event-fx
   :fetch-jobs
@@ -36,12 +37,19 @@
 (r/reg-event-db
  :edit-new-job
  (fn [db _]
-   (assoc db :active-panel :current-job-panel)))
+   (assoc db
+          :active-panel :current-job-panel
+          :current-job-error nil)))
 
 (r/reg-event-db
  :change-current-job
  (fn [db [_ key value]]
    (assoc-in db [:current-job key] value)))
+
+(r/reg-event-db
+  :current-job-failure
+  (fn [db _]
+    (assoc db :current-job-error "Oops, couldn't make it, sorry. Should we try again?")))
 
 (r/reg-event-db
  :run-tests

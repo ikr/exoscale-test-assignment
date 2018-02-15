@@ -44,7 +44,12 @@
      :on-click #(r/dispatch [:fetch-jobs])}
     "Cancel"]])
 
+(defn error-alert []
+  (let [error (r/subscribe [:current-job-error])]
+    (when @error [:div {:style {:margin-top "12px"}} [:div.alert.alert-danger @error]])))
+
 (defn panel []
   [:div
-   [:h1 "New job"]
-   (form)])
+   [:h1 "New job!"]
+   (form)
+   (error-alert)])

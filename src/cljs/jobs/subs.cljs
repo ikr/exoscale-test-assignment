@@ -15,3 +15,8 @@
   :jobs-list
   (fn [db _]
     (vals (:jobs db))))
+
+(r/reg-sub
+  :current-job-error
+  (fn [db _]
+    (:current-job-error db)))
