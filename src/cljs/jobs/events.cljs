@@ -50,13 +50,15 @@
 
 (r/reg-event-fx
   :post-job
-  (fn [{:keys [db]} _]
+  (fn [{:keys [db]} [_ current-job]]
     {:db (assoc db :current-job-saving true)
-     :http-xhrio {:method :get
+     :http-xhrio {:method :post
                   :uri "/jobs"
+                  :body current-job
+                  :request-format (ajax/url-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success [:fetch-jobs-success]
-                  :on-failure [:fetch-jobs-failure]}}))
+                  :on-success [:fetch-jobs]
+                  :on-failure [:current-job-failure]}}))
 
 (r/reg-event-db
   :current-job-failure

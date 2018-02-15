@@ -16,9 +16,12 @@
                 (-> % .-target .-value split)]))
 
 (defn form []
-  (let [current-job-saving (r/subscribe [:current-job-saving])]
+  (let [current-job-saving (r/subscribe [:current-job-saving])
+        current-job (r/subscribe [:current-job])]
    [:form
-    {:on-submit #(.preventDefault %)}
+    {:on-submit #(do
+                   (.preventDefault %)
+                   (r/dispatch [:post-job @current-job]))}
     [:div.form-group
      [:label {:for "company"} "Company"]
      [:input#company.form-control
