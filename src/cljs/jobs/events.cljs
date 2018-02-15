@@ -11,7 +11,6 @@
    {:active-panel :jobs-panel
     :jobs-fetch :not-asked
     :jobs {}
-    :current-job-fetch :not-asked
     :current-job {:company "" :title "" :keywords []}}))
 
 (r/reg-event-fx
