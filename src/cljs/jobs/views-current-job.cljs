@@ -62,6 +62,6 @@
 
 (defn panel []
   [:div
-   [:h1 "New job"]
+   [:h1 "Edit job"]
    (form)
    (error-alert)])
